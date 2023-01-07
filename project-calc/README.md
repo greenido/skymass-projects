@@ -7,6 +7,7 @@
 ------
 
 ### Misc
+* https://skymass.dev/app/skymass/docs?page=quick_start
 * Other ideas: https://www.zoho.com/us/books/free-project-estimate-calculator/
 * https://greenido.wordpress.com/2011/04/20/git-101-quick-start-guide/
 
