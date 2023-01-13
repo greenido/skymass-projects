@@ -80,7 +80,11 @@ sm.page("/project-calc", async (ui) => {
     // Let's say it's $200 for now :)
     const cost = tasks.val.devs * tasks.val.costPerDev * tasks.val.duration + 
       tasks.val.pm * 200 * tasks.val.duration/4 + tasks.val.designer * 200 * tasks.val.duration/4;
+
     const costNum = format_number(cost);
+    
+    // TODO: find a better way to 'show' it to the user. 
+    // Maybe, some 'card' in the bottom part of the page?
     ui.modal("calcModal", (ui) => {
       ui.md`# ⚖️ The project estimation ⚖️
       ### ${tasks.val.devs} x developers (at $${tasks.val.costPerDev}/h) x ${tasks.val.duration} hours, 
@@ -93,9 +97,7 @@ sm.page("/project-calc", async (ui) => {
       if (ui.button("done", { label: "Done" }).didClick) {
         ui.close();
       }
-    });
-    
+    }); 
   }
-
 });
 
