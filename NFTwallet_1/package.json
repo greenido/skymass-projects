@@ -1,0 +1,18 @@
+{
+  "name": "nftwallet_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@skymass/skymass": "^0.1.103",
+    "alchemy-sdk": "^2.4.2",
+    "axios": "^1.3.2",
+    "dotenv": "^16.0.3"
+  }
+}
