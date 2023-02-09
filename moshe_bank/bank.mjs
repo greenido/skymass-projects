@@ -2,10 +2,11 @@ import { SkyMass } from "@skymass/skymass";
 import Database from "better-sqlite3";
 import "dotenv/config";
 
+// Setting the DB (for the demo it's all in memory)
 const db = await init_db();
-
 const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 
+// The main 'check' page
 sm.page("/bank", async (ui) => {
   ui.menubar({
     logo: {
@@ -13,7 +14,9 @@ sm.page("/bank", async (ui) => {
     },
   });
 
+  //
   // get list of banks and branches from DB
+  //
   const BANKS = db
     .prepare("SELECT DISTINCT bank FROM check_deposit")
     .all()
@@ -29,7 +32,9 @@ sm.page("/bank", async (ui) => {
   {check_num} {bank} {branch} {date_from} {amount_from} ~ ~
   ~            ~     ~        {date_to}   {amount_to} ~ ~`;
 
-  // inputs...
+  //
+  // inputs to filter the main check table
+  //
   const check_num = ui.number("check_num", { label: "מספר צ׳ק #" });
   const bank = ui.select("bank", { label: "בנק", options: BANKS });
   const branch = ui.select("branch", { label: "סניף", options: BRANCHES });
@@ -102,34 +107,46 @@ sm.page("/bank", async (ui) => {
   });
 });
 
+//
 // return a rand int between min, max
+//
 function rand_range(min, max) {
   return Math.round(min + Math.random() * (max - min));
 }
 
+//
 // return a rand element from an array
+//
 function rand(choices) {
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
+//
 // convert comma separated string into a trimmed array
+//
 function list(str) {
   return str.split(",").map((x) => x.trim());
 }
 
+//
 // convert date -> unixtime
+//
 function date_to_unixtime(d) {
   return Math.round(d.getTime() / 1000);
 }
 
+//
 // convert unixtime -> date
+//
 function unixtime_to_date(u) {
   const d = new Date();
   d.setTime(u * 1000);
   return d;
 }
 
-// function to initialize the database
+//
+// function to initialize the database - Some random names, numbers and other stuff so it will be a 'full table'
+//
 async function init_db() {
   const FIRST = list("משה, עופר, פלד, אילן, גילי, בארשי, קלוד, יריב"); //"Gad, Ido, Eyal, Beni, Miri, Asaf, Moshe");
   const LAST = list("כהן, לוי, פוד, בן-שבת, מוש, גוש");
@@ -186,7 +203,9 @@ async function init_db() {
 `
   );
 
+  //
   // populate with 100 imaginary checks
+  //
   Array(100)
     .fill(0)
     .forEach(() => {
