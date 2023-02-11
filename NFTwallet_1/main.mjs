@@ -51,41 +51,64 @@ function format_number(num) {
 //
 const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 
-sm.page("/wallet", async (ui) => {
+sm.page("/m", async (ui) => {
+  const { nfts } = ui.getState(() => ({ nfts: [] }));
+
   ui.md`## 🧮 NFT Wallet Viewer`;
- 
-  const nfts_adress = ui.string("nfts_address", {
-    label: "Your NFTs Addres",
-    placeholder: "e.g. vitalik.eth ",
+
+  const address = ui.string("address", {
+    label: "Your NFTs Address",
+    placeholder: "e.g. vitalik.eth",
     required: true,
-    defaultVal: "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3"
+    defaultVal: "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3",
   });
 
-  const goBut = ui.button("button", {
+  const go = ui.button("button", {
+    disabled: !address.isReady, // disable until input is in a valid state... (eg not blank)
     label: "Go!",
   });
-  
-  if (goBut.didClick) {
+
+  if (go.didClick) {
     ui.toast("👋🏼 Fetching all your NFTs and filtering the spam ones!");
-    let nfts = await getNFTs(nfts_adress.val);
-    ui.setState({ nfts });
+    const result = await alchemy.nft.getNftsForOwner(address.val, {
+      excludeFilters: [NftFilters.SPAM],
+    });
+    // convert results into an array good for showing in a table
+    const owned = result.ownedNfts.map((nft) => {
+      let nftName = "No name :/";
+      //console.log(nft.contract);
+      if (nft.contract && nft.contract.name) {
+        nftName = nft.contract.name;
+      }
+      return {
+        tokenId: nft.tokenId,
+        title: nft.title,
+        description: nft.description,
+        type: nft.tokenType,
+        address: nft.contract.address,
+        name: nftName,
+        thumbnail: nft.media?.[0]?.thumbnail,
+      };
+    });
+    ui.setState({ nfts: owned });
   }
 
-  const { nfts } = ui.getState(() => ({ nfts: [] }));
-  ui.table("nfts", nfts, { 
-    label: "NFTs"
+  const nftsTable = ui.table("nfts", nfts, {
+    label: "NFTs",
+    columns: {
+      tokenId: { label: "token Id", isId: true }, // first column is id by default
+      title: { label: "Title" },
+      description: { label: "Description" },
+      type: { label: "Token Type" },
+      address: { label: "Contract Address" },
+      name: { label: "Contract Name" },
+      thumbnail: { label: "Thumbnail", format: "image" }, // <- image
+    },
   });
 
-  // columns: {
-  //   title: { label: "Title"}, 
-  //   tokenId: { label: "token Id"},
-  //   description: {label: "description"},
-  //   tokenType: {label: "token Type"},
-  //   constractAddress: {label: "Contract Address"},
-  //   constractName: {label: "Contract Name"},
-  //   constractThumb: {label: "Contract Thumbnail"}
-  // }
-  //url: {label: "GitHub URL", format: "link_new_tab" }
+  const [selectedNFTs] = nftsTable.selection;
+  if (selectedNFTs) {
+    ui.log("You selected...", selectedNFTs);
+  }
 
 });
-
