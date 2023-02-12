@@ -172,11 +172,19 @@ sm.page("/m", async (ui) => {
       // ui.toast((await ui.confirm({ text: "Are you sure you wish to report it as SPAM?" }))
       //     ? 'Okay! It is reported!'
       //     : 'No worries 👊🏽');
-      const markSpamButton = ui.button("markSpamButton", { label: "Report it as SPAM!" });
+      const markSpamButton = ui.button("markSpamButton", { label: "🛑 Report it as SPAM" });
       if (markSpamButton.didClick) {
-        // TODO
-        console.log("call the report SPAM API");
-        ui.toast("👊🏽 Done! It's marked it as spam.");
+        const options = {method: 'GET', headers: {accept: 'application/json'}};
+        const ethAddress = (selectedNFTs.address).replace("https://etherscan.io/address/", "");
+        const spamUrl = 'https://eth-mainnet.g.alchemy.com/nft/v2/' + process.env["ALCHEMY_KEY"] + '/reportSpam?address=' + ethAddress;
+        console.log("== going to report spam on: "+ spamUrl);
+        fetch(spamUrl , options)
+          .then(response => {
+            console.log(response)
+            console.log("Call the report SPAM API with address: " + selectedNFTs.address);
+            ui.toast("👊🏽 Done! It's marked it as spam.");
+          })
+          .catch(err => console.error(err));
         ui.close();
       }
 
