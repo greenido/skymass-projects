@@ -108,7 +108,34 @@ sm.page("/m", async (ui) => {
 
   const [selectedNFTs] = nftsTable.selection;
   if (selectedNFTs) {
-    ui.log("You selected...", selectedNFTs);
+    ui.log("You selected: ", selectedNFTs);
+    await ui.modal("modal", async (ui) => {
+      ui.md`# 🌅 NFT Details  
+       * Title: **${selectedNFTs.title}**
+       * Token Id: **${selectedNFTs.tokenId}**
+       * Address: **${selectedNFTs.address}**
+       * Description: ${selectedNFTs.description}
+       * Image: [](${selectedNFTs.thumbnail})
+      `;
+
+      // ui.toast((await ui.confirm({ text: "Are you sure you wish to report it as SPAM?" }))
+      //     ? 'Okay! It is reported!'
+      //     : 'No worries 👊🏽');
+      const markSpamButton = ui.button("markSpamButton", { label: "Report it as SPAM!" });
+      if (markSpamButton.didClick) {
+        // TODO
+        console.log("call the report SPAM API");
+        ui.toast("👊🏽 Done! It's marked it as spam.");
+        ui.close();
+      }
+
+      const close = ui.button("close", { label: "Cancel" });
+      if (close.didClick) {
+        ui.toast("🥂 No worries");
+        ui.close();
+      }
+    });
+
   }
 
 });
