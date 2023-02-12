@@ -1,3 +1,25 @@
+/*
+  An NFT wallet that let you mark SPAM NFTs and remove them.
+  @author: @greenido
+  @date: FEB-2023
+
+  @see:
+
+  opensea listing json format:
+    floorPrice: 1.1, 
+    collectionName: 'Moonbirds Oddities', 
+    safelistRequestStatus: 'verified', 
+    imageUrl: 'https://i.seadn.io/gae/M3yJrT9TRLmE8sZb8TjyA…agm6h86548W5hmCva2kQ2rC_Q?w=500&auto=format', 
+    description: '10,000 Moonbird pellets, regurgitated from…llocated at random through the collection.', …}
+    collectionName: 'Moonbirds Oddities'
+    description: '10,000 Moonbird pellets, regurgitated from the imagination of artist Gremplin and revealed in July 2022. Each Oddity is derived from a Moonbird, with a smattering of new traits and features allocated at random through the collection.'
+    discordUrl: 'https://discord.gg/Xv7E796DDP'
+    externalUrl: 'https://www.oddities.xyz/'
+    floorPrice: 1.1
+    imageUrl: 'https://i.seadn.io/gae/M3yJrT9TRLmE8sZb8TjyAbDJYBCoCWFFXGXd61G7d5pDESUPfGVocjmg4V9JlyGCr9ENri36cisKdagm6h86548W5hmCva2kQ2rC_Q?w=500&auto=format'
+    lastIngestedAt: '2023-02-10T13:10:13.000Z'
+    safelistRequestStatus: 'verified'
+*/
 import { SkyMass } from "@skymass/skymass";
 import { Alchemy, Network, NftFilters } from "alchemy-sdk";
 import "dotenv/config";
@@ -15,7 +37,6 @@ const nftsArray = new Array();
 //
 async function getNFTs(address) {
   // Wallet address
-  //const address = "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3";  //"elanhalpern.eth";
   console.log(`== Going to check address: ${address}` );
 
   // Get non-spam NFTs
@@ -46,6 +67,10 @@ function format_number(num) {
   return NF.format(num);
 }
 
+function truncate(str, n){
+  return (str.length > n) ? str.slice(0, n-1) : str;
+};
+
 //
 // Start the skymass party 🎉
 //
@@ -60,16 +85,18 @@ sm.page("/m", async (ui) => {
     label: "Your NFTs Address",
     placeholder: "e.g. vitalik.eth",
     required: true,
-    defaultVal: "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3",
+    // TODO... change this one
+    defaultVal: "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3", 
   });
 
   const go = ui.button("button", {
-    disabled: !address.isReady, // disable until input is in a valid state... (eg not blank)
+    // Disable until input is in a valid state... (eg not blank)
+    disabled: !address.isReady, 
     label: "Go!",
   });
 
   if (go.didClick) {
-    ui.toast("👋🏼 Fetching all your NFTs and filtering the spam ones!");
+    ui.toast("👋🏼 Fetching all your NFTs");
     const result = await alchemy.nft.getNftsForOwner(address.val, {
       excludeFilters: [NftFilters.SPAM],
     });
@@ -79,7 +106,6 @@ sm.page("/m", async (ui) => {
       if (nft.title == "#9338") {
         console.log("=================  9338  ===================");
         console.log(nft);
-        console.log("====================================");
       }
       
       //console.log(nft.contract);
@@ -91,14 +117,16 @@ sm.page("/m", async (ui) => {
         nft.media?.[0]?.gateway;
       }
       return {
-        tokenId: nft.tokenId,
+        tokenId: truncate(nft.tokenId, 10),
         title: nft.title,
         thumbnail: nftImg,
-        description: nft.description,
+        description: truncate(nft.description, 200),
         type: nft.tokenType,
-        address: nft.contract.address,
+        address: "https://etherscan.io/address/" + nft.contract.address,
         name: nftName,
-        opensea: JSON.stringify(nft.contract.openSea)
+        safelistRequestStatus: nft.contract.openSea.safelistRequestStatus,
+        floorPrice: nft.contract.openSea.floorPrice ? nft.contract.openSea.floorPrice : "" ,
+        opensea: "https://opensea.io/assets?search[query]=" + encodeURI(nft.contract.openSea.collectionName)
       };
     });
     ui.setState({ nfts: owned });
@@ -112,9 +140,11 @@ sm.page("/m", async (ui) => {
       thumbnail: { label: "Thumbnail", format: "image" }, // <- image
       description: { label: "Description" },
       type: { label: "Token Type" },
-      address: { label: "Contract Address" },
+      address: { label: "Contract Address" , format: "link"},
       name: { label: "Contract Name" },
-      opensea: { label: "OpenSea Details" , format: "code"}
+      safelistRequestStatus: { label: "Safe list"},
+      floorPrice: {label: "floor Price", format: "0.0000"},
+      opensea: { label: "OpenSea Details" , format: "link"}
     },
   });
 
