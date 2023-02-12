@@ -96,17 +96,17 @@ sm.page("/m", async (ui) => {
   });
 
   if (go.didClick) {
-    ui.toast("👋🏼 Fetching all your NFTs");
+    ui.toast("👋🏼 Fetching all your NFTs without the ones that are marked as SPAM");
     const result = await alchemy.nft.getNftsForOwner(address.val, {
       excludeFilters: [NftFilters.SPAM],
     });
     // convert results into an array good for showing in a table
     const owned = result.ownedNfts.map((nft) => {
       let nftName = "No name :/";
-      if (nft.title == "#9338") {
-        console.log("=================  9338  ===================");
-        console.log(nft);
-      }
+      // if (nft.title == "#9338") {
+      //   console.log("=================  9338  ===================");
+      //   console.log(nft);
+      // }
       
       //console.log(nft.contract);
       if (nft.contract && nft.contract.name) {
@@ -180,7 +180,7 @@ sm.page("/m", async (ui) => {
         console.log("== going to report spam on: "+ spamUrl);
         fetch(spamUrl , options)
           .then(response => {
-            console.log(response)
+            //console.log(response)
             console.log("Call the report SPAM API with address: " + selectedNFTs.address);
             ui.toast("👊🏽 Done! It's marked it as spam.");
           })
