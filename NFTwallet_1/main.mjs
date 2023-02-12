@@ -76,18 +76,29 @@ sm.page("/m", async (ui) => {
     // convert results into an array good for showing in a table
     const owned = result.ownedNfts.map((nft) => {
       let nftName = "No name :/";
+      if (nft.title == "#9338") {
+        console.log("=================  9338  ===================");
+        console.log(nft);
+        console.log("====================================");
+      }
+      
       //console.log(nft.contract);
       if (nft.contract && nft.contract.name) {
         nftName = nft.contract.name;
       }
+      let nftImg = nft.media?.[0]?.thumbnail;
+      if (!nftImg) {
+        nft.media?.[0]?.gateway;
+      }
       return {
         tokenId: nft.tokenId,
         title: nft.title,
+        thumbnail: nftImg,
         description: nft.description,
         type: nft.tokenType,
         address: nft.contract.address,
         name: nftName,
-        thumbnail: nft.media?.[0]?.thumbnail,
+        opensea: JSON.stringify(nft.contract.openSea)
       };
     });
     ui.setState({ nfts: owned });
@@ -98,17 +109,18 @@ sm.page("/m", async (ui) => {
     columns: {
       tokenId: { label: "token Id", isId: true }, // first column is id by default
       title: { label: "Title" },
+      thumbnail: { label: "Thumbnail", format: "image" }, // <- image
       description: { label: "Description" },
       type: { label: "Token Type" },
       address: { label: "Contract Address" },
       name: { label: "Contract Name" },
-      thumbnail: { label: "Thumbnail", format: "image" }, // <- image
+      opensea: { label: "OpenSea Details" , format: "code"}
     },
   });
 
   const [selectedNFTs] = nftsTable.selection;
   if (selectedNFTs) {
-    ui.log("You selected: ", selectedNFTs);
+    //ui.log("🌅🌅🌅 You selected: ", selectedNFTs);
     await ui.modal("modal", async (ui) => {
       ui.md`# 🌅 NFT Details  
        * Title: **${selectedNFTs.title}**
@@ -118,11 +130,14 @@ sm.page("/m", async (ui) => {
       `;
 
       let nftImg = selectedNFTs.thumbnail;
-      ui.image("img", {
+      if (!nftImg) {
+        nftImg = "https://cdn.glitch.global/3b2d349e-d8c0-4520-9208-afe1a374a8bd/no-img.png?v=1676162410120";
+      }
+      const img = ui.image("img", {
         src: nftImg,
         size: "m"
       });
-      
+      ui.md`~ {img} ~`;
 
       // ui.toast((await ui.confirm({ text: "Are you sure you wish to report it as SPAM?" }))
       //     ? 'Okay! It is reported!'
