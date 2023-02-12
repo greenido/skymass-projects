@@ -115,8 +115,14 @@ sm.page("/m", async (ui) => {
        * Token Id: **${selectedNFTs.tokenId}**
        * Address: **${selectedNFTs.address}**
        * Description: ${selectedNFTs.description}
-       * Image: [](${selectedNFTs.thumbnail})
       `;
+
+      let nftImg = selectedNFTs.thumbnail;
+      ui.image("img", {
+        src: nftImg,
+        size: "m"
+      });
+      
 
       // ui.toast((await ui.confirm({ text: "Are you sure you wish to report it as SPAM?" }))
       //     ? 'Okay! It is reported!'
