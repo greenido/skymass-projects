@@ -4,7 +4,6 @@
   @date: FEB-2023
 
   @see:
-
   opensea listing json format:
     floorPrice: 1.1, 
     collectionName: 'Moonbirds Oddities', 
@@ -84,13 +83,13 @@ const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 sm.page("/m", async (ui) => {
   const { nfts } = ui.getState(() => ({ nfts: [] }));
      
-    ui.md `## 🧮 NFT Wallet Viewer `;
+    ui.md `## 🧮 NFT Tool`;
   
     const address = ui.string("address", {
     label: "Your NFTs Address",
     placeholder: "e.g. vitalik.eth",
     required: true,
-    defaultVal: "vitalik.eth" //0x84A3e86beF9f31472453688bEf6d7f9b48e382a3", 
+    defaultVal: "vitalik.eth"
   });
 
   const go = ui.button("button", {
