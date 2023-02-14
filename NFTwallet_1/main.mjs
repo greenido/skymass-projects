@@ -92,7 +92,7 @@ sm.page("/m", async (ui) => {
   const go = ui.button("button", {
     // Disable until input is in a valid state... (eg not blank)
     disabled: !address.isReady, 
-    label: "Go!",
+    label: "Go",
   });
 
   if (go.didClick) {
@@ -120,13 +120,13 @@ sm.page("/m", async (ui) => {
         tokenId: truncate(nft.tokenId, 10),
         title: nft.title,
         thumbnail: nftImg,
-        description: truncate(nft.description, 200),
+        description: truncate(nft.description, 600),
         type: nft.tokenType,
         address: "https://etherscan.io/address/" + nft.contract.address,
         name: nftName,
-        safelistRequestStatus: nft.contract.openSea.safelistRequestStatus,
-        floorPrice: nft.contract.openSea.floorPrice ? nft.contract.openSea.floorPrice : "" ,
-        opensea: "https://opensea.io/assets?search[query]=" + encodeURI(nft.contract.openSea.collectionName)
+        safelistRequestStatus: (nft.contract.openSea && nft.contract.openSea.safelistRequestStatus) ? nft.contract.openSea.safelistRequestStatus : "N/A",
+        floorPrice: ( nft.contract.openSea && nft.contract.openSea.floorPrice) ? nft.contract.openSea.floorPrice : "" ,
+        opensea: (nft.contract.openSea && nft.contract.openSea.collectionName) ? "https://opensea.io/assets?search[query]=" + encodeURI(nft.contract.openSea.collectionName) : "N/A"
       };
     });
     ui.setState({ nfts: owned });
