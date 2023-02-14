@@ -32,6 +32,11 @@ const config = {
 const alchemy = new Alchemy(config);
 const nftsArray = new Array();
 
+const PAGE_LOGO = {
+  text: "NFT Report SPAM Tool",
+  src: "https://source.unsplash.com/160x90?nft",
+};
+
 //
 //
 //
@@ -78,15 +83,14 @@ const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 
 sm.page("/m", async (ui) => {
   const { nfts } = ui.getState(() => ({ nfts: [] }));
-
-  ui.md`## 🧮 NFT Wallet Viewer`;
-
-  const address = ui.string("address", {
+     
+    ui.md `## 🧮 NFT Wallet Viewer `;
+  
+    const address = ui.string("address", {
     label: "Your NFTs Address",
     placeholder: "e.g. vitalik.eth",
     required: true,
-    // TODO... change this one
-    defaultVal: "0x84A3e86beF9f31472453688bEf6d7f9b48e382a3", 
+    defaultVal: "vitalik.eth" //0x84A3e86beF9f31472453688bEf6d7f9b48e382a3", 
   });
 
   const go = ui.button("button", {
@@ -120,7 +124,7 @@ sm.page("/m", async (ui) => {
         tokenId: truncate(nft.tokenId, 10),
         title: nft.title,
         thumbnail: nftImg,
-        description: truncate(nft.description, 600),
+        description:nft.description,
         type: nft.tokenType,
         address: "https://etherscan.io/address/" + nft.contract.address,
         name: nftName,
@@ -138,7 +142,7 @@ sm.page("/m", async (ui) => {
       tokenId: { label: "token Id", isId: true }, // first column is id by default
       title: { label: "Title" },
       thumbnail: { label: "Thumbnail", format: "image" }, // <- image
-      description: { label: "Description" },
+      description: { label: "Description", hidden: true },
       type: { label: "Token Type" },
       address: { label: "Contract Address" , format: "link"},
       name: { label: "Contract Name" },
@@ -197,4 +201,19 @@ sm.page("/m", async (ui) => {
 
   }
 
+  const helpBut = ui.button("helpbutton", {
+    label: "🍏 Help",
+  });
+  if (helpBut.didClick) {
+    await ui.alert({ text: "This tool gives you the option to see all the NFTs that a specific wallet is holding. You can also suggest to make some as SPAM by clicking on the NFT's row and it will suggest to alchemy.com to check and mark it." });
+  }
+
+  const explanation = "NFT means non-fungible tokens (NFTs), which are generally created using the same type of programming used for cryptocurrencies. In simple terms these cryptographic assets are based on blockchain technology. They cannot be exchanged or traded equivalently like other cryptographic assets. You can learn more at: https://www.simplilearn.com/tutorials/blockchain-tutorial/what-is-nft";
+  const nftBut = ui.button("nft-button", {
+    label: "🌠 What's NFT?",
+  });
+  if (nftBut.didClick) {
+    await ui.alert({ text: explanation });
+  }
+  
 });
