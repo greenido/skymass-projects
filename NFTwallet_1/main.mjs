@@ -92,6 +92,7 @@ sm.page("/m", async (ui) => {
     defaultVal: "vitalik.eth"
   });
 
+  //
   const go = ui.button("button", {
     // Disable until input is in a valid state... (eg not blank)
     disabled: !address.isReady, 

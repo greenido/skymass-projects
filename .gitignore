@@ -1,3 +1,9 @@
 
 NFTwallet_1/.env
 moshe_bank/.env
+g-console-search-util/.env
+g-console-search-util/oauth2.keys.json
+g-console-search-util/old-tests/drive-example.html
+g-console-search-util/old-tests/g-api-testing.js
+g-console-search-util/old-tests/gis-example.html
+g-console-search-util/old-tests/gsc-ex-1.html
