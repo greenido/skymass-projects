@@ -69,7 +69,7 @@ async function authenticate(scopes) {
         try {
           if (req.url.indexOf('/oauth2callback') > -1) {
             const qs = new url.URL(req.url, 'http://localhost:3000').searchParams;
-            res.end('Authentication successful! Please return to the console.');
+            res.end('Authentication successful! Please return to your main page (or if you are developer the console ;)');
             server.destroy();
             const {tokens} = await oauth2Client.getToken(qs.get('code'));
             oauth2Client.credentials = tokens; // eslint-disable-line require-atomic-updates
@@ -90,7 +90,7 @@ async function authenticate(scopes) {
 async function runSample() {
  console.log("=== auth Passed - let's call the service ===");
   const res = await webmasters.searchanalytics.query({
-    siteUrl: 'http://greenido.wordpress.com', //'elischwartz.co', 
+    siteUrl: 'elischwartz.co',  //'http://greenido.wordpress.com', //
     requestBody: {
       startDate: '2022-01-01',
       endDate: '2022-12-30',
