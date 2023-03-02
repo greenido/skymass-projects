@@ -196,9 +196,6 @@ sm.page("/m", async (ui) => {
       });
       ui.md`~ {img} ~`;
 
-      // ui.toast((await ui.confirm({ text: "Are you sure you wish to report it as SPAM?" }))
-      //     ? 'Okay! It is reported!'
-      //     : 'No worries 👊🏽');
       const markSpamButton = ui.button("markSpamButton", { label: "🛑 Report it as SPAM" });
       if (markSpamButton.didClick) {
         const options = {method: 'GET', headers: {accept: 'application/json'}};
@@ -207,7 +204,6 @@ sm.page("/m", async (ui) => {
         console.log("== going to report spam on: "+ spamUrl);
         fetch(spamUrl , options)
           .then(response => {
-            //console.log(response)
             console.log("Call the report SPAM API with address: " + selectedNFTs.address);
             ui.toast("👊🏽 Done! It's marked it as spam.");
           })
