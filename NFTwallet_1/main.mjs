@@ -108,22 +108,6 @@ sm.page("/m", async (ui) => {
         break;
     }
     
-    // const helpBut = ui.button("helpbutton", {
-    //   label: "🍏 Help",
-    // });
-    // if (helpBut.didClick) {
-    //   await ui.alert({ text: "This tool gives you the option to see all the NFTs that a specific wallet is holding. You can also suggest to make some as SPAM by clicking on the NFT's row and it will suggest to alchemy.com to check and mark it." });
-    // }
-  
-    // const explanation = "NFT means non-fungible tokens (NFTs), which are generally created using the same type of programming used for cryptocurrencies. In simple terms these cryptographic assets are based on blockchain technology. They cannot be exchanged or traded equivalently like other cryptographic assets. You can learn more at: https://www.simplilearn.com/tutorials/blockchain-tutorial/what-is-nft";
-    // const nftBut = ui.button("nft-button", {
-    //   label: "🌠 What's NFT?",
-    // });
-    // if (nftBut.didClick) {
-    //   await ui.alert({ text: explanation });
-    // }
-
-
     const address = ui.string("address", {
     label: "Your NFTs Address",
     placeholder: "e.g. vitalik.eth",
