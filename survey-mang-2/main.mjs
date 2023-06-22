@@ -48,19 +48,6 @@ sm.page("/crud-testing", async (ui) => {
 
   }
 
-  // 👉 new button to trigger the update modal
-  // const edit = ui.button("edit", { label: "Edit Employee" });
-  // if (table.selection.length && edit.didClick) {
-  //   const employee = table.selection[0];
-  //   await ui.modal("modal", (ui) => editEmployee(ui, employee));
-  // }
-
-  // const del = ui.button("delete", { label: "Delete Employee" });
-  // if (table.selection.length && del.didClick) {
-  //   const row = table.selection[0];
-  //   await db.any("DELETE FROM employee WHERE id = $(id)", { id: row.id });
-  // }
-
   const add = ui.button("add", { label: "Add Employee" });
   if (add.didClick) {
     await ui.modal("modal", (ui) => addEmployee(ui));
