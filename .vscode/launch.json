@@ -7,12 +7,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch main",
-      "envFile":"${workspaceFolder}/NFTwallet_1/.env",
+      "name": "Launch survey-mang-2 main",
+      "envFile":"${workspaceFolder}/survey-mang-2/.env",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/NFTwallet_1/main.mjs"
+      "program": "${workspaceFolder}/survey-mang-2/main.mjs"
     },
     {
       "type": "node",

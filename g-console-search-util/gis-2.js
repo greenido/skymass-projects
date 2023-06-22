@@ -90,7 +90,7 @@ async function authenticate(scopes) {
 async function runSample() {
  console.log("=== auth Passed - let's call the service ===");
   const res = await webmasters.searchanalytics.query({
-    siteUrl: 'elischwartz.co',  //'http://greenido.wordpress.com', //
+    siteUrl: 'http://greenido.wordpress.com', //
     requestBody: {
       startDate: '2022-01-01',
       endDate: '2022-12-30',

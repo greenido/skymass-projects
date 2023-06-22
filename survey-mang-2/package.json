@@ -1,0 +1,18 @@
+{
+  "name": "survey mangement system v2",
+  "version": "2.0.0",
+  "description": "",
+  "main": "main.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "TBD",
+  "dependencies": {
+    "@skymass/skymass": "^0.3.7",
+    "better-sqlite3": "^8.4.0",
+    "dotenv": "^16.3.1",
+    "pg-promise": "^11.5.0"
+  }
+}

@@ -173,6 +173,7 @@ sm.page("/m", async (ui) => {
       floorPrice: {label: "floor Price", format: "0.0000"},
       opensea: { label: "OpenSea Details" , format: "link"}
     },
+    size: "rows"
   });
 
   const [selectedNFTs] = nftsTable.selection;
