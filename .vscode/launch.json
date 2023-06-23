@@ -17,11 +17,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch gis-example",
+      "name": "Launch surveys.mjs",
+      "envFile":"${workspaceFolder}/survey-mang-2/.env",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/g-console-search-util/gis-2.js"
+      "program": "${workspaceFolder}/survey-mang-2/surveys.mjs"
     }
   ]
 }

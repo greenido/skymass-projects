@@ -3,7 +3,7 @@ import "dotenv/config";
 
 import pgPromise from "pg-promise";
 
-const db = await initDB(); // pgp(process.env["CONNECTION_DB"]);
+const db = await initDB();
 const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 
 
@@ -11,6 +11,46 @@ const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 //
 //
 sm.page("/crud-testing", async (ui) => {
+  const menu = ui.menubar({
+    logo: {
+      // text - if no src is specified
+      text: "ACME",
+  
+      // optional image
+      src: "https://www.wikicorporates.org/mediawiki/images/4/4a/Acme-Markets-1998.svg",
+  
+      // optional action for logo clicks
+      action: "home",
+    },
+    items: [
+      // menu item with label + icon
+      { label: "User", icon: "user", action: "user" },
+      // just an icon
+      { icon: "bell", action: "alerts" },
+      // rendered as a 'button'
+      { label: "Admin", action: "admin", appearance: "button" },
+      // a menu
+      {
+        label: "File",
+        icon: "file",
+  
+        // list of menu items
+        items: [
+          { label: "New", action: "new" },
+          { label: "Open", action: "open" },
+          { label: "Save", action: "save" },
+          // this item is *disabled*
+          { label: "Export...", action: "export", disabled: true },
+        ],
+      },
+    ],
+  });
+  
+  // .didClick contains the selected "action"
+  if (menu.didClick) {
+    ui.toast(`You clicked "${menu.didClick}"`);
+  }
+
   ui.md`### ☎️ Employee Tool`;
 
   const rows = db.any("SELECT id, name, email, role FROM employee");
@@ -111,7 +151,7 @@ async function addEmployee(ui) {
 //
 async function initDB() {
   const DB_URL = process.env["CONNECTION_DB"];
-  console.log("DB_URL: ", DB_URL);
+  //console.log("DB_URL: ", DB_URL);
 
   const pgp = pgPromise({});
   const new_db = pgp(DB_URL);
@@ -124,10 +164,11 @@ async function initDB() {
 
   // If the table exists, the `exists` variable will be `true`.
   if (exists[0].exists === true) {
+    console.log("☕️ Table /employee/ already exists - skipping init of DB");
     return new_db;
   }
 
-  // Create a new table of employees
+  // Create a new table of employee
   new_db
     .any(
       `
