@@ -138,6 +138,11 @@ async function addSurvey(ui) {
     action: ui.button("add", { label: "Add survey" }),
   });
   if (survey.didSubmit) {
+    if (survey.val.survey_definition === "" || 
+        survey.val.survey_definition === undefined ||
+        survey.val.survey_definition === ' ') {
+      survey.val.survey_definition = {};
+    }
     await db.any(
       "INSERT INTO survey (name, survey_definition, live_from, results_key, comments) VALUES ($(name), $(survey_definition), $(live_from), $(results_key), $(comments) )",
       survey.val
