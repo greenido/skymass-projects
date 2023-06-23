@@ -102,7 +102,7 @@ async function editSurvey(ui, survey) {
   const edited = ui.form("survey", {
     fields: {
       name: ui.string("name", { label: "Name", required: true }),
-      survey_definition: ui.survey_definition("survey_definition", { label: "survey_definition", required: true }),
+      survey_definition: ui.textarea("survey_definition", { label: "survey_definition", required: true }),
       live_from: ui.date("live_from", { label: "Live from", required: true }),
       results_key: ui.string("results_key", { label: "Results key", required: true }),
       comments: ui.string("comments", { label: "Comments", required: true }),
@@ -110,6 +110,9 @@ async function editSurvey(ui, survey) {
     action: ui.button("update", { label: "Update survey" }),
     defaultVal: survey,
   });
+  console.log("-------------\n\n");
+  console.log(survey);
+
   if (edited.didSubmit) {
     await db.any(
       "UPDATE survey SET name = $(name), survey_definition = $(survey_definition), role = $(role) WHERE id = $(id)",
@@ -149,7 +152,7 @@ async function addSurvey(ui) {
 //
 async function initDB() {
   const DB_URL = process.env["CONNECTION_DB"];
-  console.log("DB_URL: ", DB_URL);
+  //console.log("DB_URL: ", DB_URL);
 
   const pgp = pgPromise({});
   const new_db = pgp(DB_URL);

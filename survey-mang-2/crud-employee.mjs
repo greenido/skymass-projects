@@ -113,6 +113,9 @@ async function editEmployee(ui, employee) {
     action: ui.button("update", { label: "Update Employee" }),
     defaultVal: employee,
   });
+  console.log("-------------\n\n");
+  console.log(employee);
+
   if (edited.didSubmit) {
     await db.any(
       "UPDATE employee SET name = $(name), email = $(email), role = $(role) WHERE id = $(id)",
