@@ -99,24 +99,36 @@ sm.page("/surveys-mang-1", async (ui) => {
 //
 async function editSurvey(ui, survey) {
   ui.md`### Update survey`;
+  let tmp_survey_definition = JSON.stringify(survey.survey_definition);
   const edited = ui.form("survey", {
     fields: {
-      name: ui.string("name", { label: "Name", required: true }),
-      survey_definition: ui.textarea("survey_definition", { label: "survey_definition", required: true }),
-      live_from: ui.date("live_from", { label: "Live from", required: true }),
-      results_key: ui.string("results_key", { label: "Results key", required: true }),
-      comments: ui.string("comments", { label: "Comments", required: true }),
+      name: ui.string("name", { label: "Name", required: true, defaultVal: survey.name }),
+      survey_definition: ui.textarea("survey_definition", { 
+        label: "survey_definition", 
+        required: true,
+        defaultVal: tmp_survey_definition
+      }),
+      live_from: ui.date("live_from", { label: "Live from", required: true, defaultVal: survey.live_from }),
+      results_key: ui.string("results_key", { label: "Results key", required: true , defaultVal: survey.results_key}),
+      comments: ui.string("comments", { label: "Comments", required: true, defaultVal: survey.comments }),
     },
     action: ui.button("update", { label: "Update survey" }),
-    defaultVal: survey,
+    // defaultVal: survey,
   });
   console.log("-------------\n\n");
   console.log(survey);
 
   if (edited.didSubmit) {
-    await db.any(
-      "UPDATE survey SET name = $(name), survey_definition = $(survey_definition), role = $(role) WHERE id = $(id)",
-      { id: survey.id, ...edited.val }
+    let json_survey_definition = {};
+    try {
+       json_survey_definition = JSON.parse(edited.val.survey_definition);  
+    } catch (error) {
+      console.log("Error parsing json: ", error);
+      console.log("json_survey_definition: ", json_survey_definition);
+    }
+    await db.any("UPDATE survey SET name=$(name) , survey_definition=$(survey_definition), \
+        live_from=$(live_from), results_key=$(results_key), comments=$(comments) WHERE id = $(id)",
+      { id: survey.id, name: edited.val.name, survey_definition: json_survey_definition, ...edited.val }
     );
     ui.close();
   }
@@ -130,7 +142,10 @@ async function addSurvey(ui) {
   const survey = ui.form("survey", {
     fields: {
       name: ui.string("name", { label: "Name", required: true }),
-      survey_definition: ui.textarea("survey_definition", { label: "survey_definition", required: true }),
+      survey_definition: ui.textarea("survey_definition", 
+        { label: "survey_definition", 
+        required: true,
+        defaultVal: '{}' }),
       live_from: ui.date("live_from", { label: "Live from", required: true }),
       results_key: ui.string("results_key", { label: "Results key", required: true }),
       comments: ui.string("comments", { label: "Comments", required: true }),
@@ -141,7 +156,7 @@ async function addSurvey(ui) {
     if (survey.val.survey_definition === "" || 
         survey.val.survey_definition === undefined ||
         survey.val.survey_definition === ' ') {
-      survey.val.survey_definition = {};
+      survey.val.survey_definition = '{}';
     }
     await db.any(
       "INSERT INTO survey (name, survey_definition, live_from, results_key, comments) VALUES ($(name), $(survey_definition), $(live_from), $(results_key), $(comments) )",
