@@ -24,20 +24,19 @@ sm.page("/surveys-mang-1", async (ui) => {
     },
     items: [
       // menu item with label + icon
-      { label: "User", icon: "user", action: "user" },
+      // { label: "User", icon: "user", action: "user" },
       // just an icon
       { icon: "bell", action: "alerts" },
       // rendered as a 'button'
-      { label: "Admin", action: "admin", appearance: "button" },
-      // a menu
+      // { label: "Admin", action: "admin", appearance: "button" },
+      // A menu
       {
-        label: "File",
+        label: "Survey",
         icon: "file",
   
         // list of menu items
         items: [
           { label: "New", action: "new" },
-          { label: "Open", action: "open" },
           { label: "Save", action: "save" },
           // this item is *disabled*
           { label: "Export...", action: "export", disabled: true },
@@ -48,7 +47,10 @@ sm.page("/surveys-mang-1", async (ui) => {
   
   // .didClick contains the selected "action"
   if (menu.didClick) {
-    ui.toast(`You clicked "${menu.didClick}"`);
+    if (menu.didClick === "new") {
+      await ui.modal("modal", (ui) => addSurvey(ui));
+    }
+    ui.toast(`You clicked "${menu.didClick}" - not implemented yet... but soon!`);
   }
 
   ui.md`### ☎️ Survey Tool`;
