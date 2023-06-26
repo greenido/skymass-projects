@@ -1,7 +1,8 @@
 # 🧮 skymass-projects 🧮
 
 ## Experiments with skymass
-https://skymass.dev/
+- https://skymass.dev/
+- https://www.npmjs.com/package/@skymass/skymass
 
 ## Live Demo(s)
 - https://skymass.glitch.me/
