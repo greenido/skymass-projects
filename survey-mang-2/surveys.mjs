@@ -1,3 +1,16 @@
+/**
+ * Interal survey management tool
+ * @author greenido
+ * @date 2023-06-25
+ * @version 1.0.0
+ * @see
+ * Create Survery: https://surveyjs.io/survey-creator/examples/product-feedback-survey-template/reactjs
+ * Publish Survery: https://surveyjs.io/form-library/documentation/get-started-react
+ * Gen examples: https://github.com/surveyjs/surveyjs-react-client
+ * 
+ * DB Postgres: https://console.neon.tech/app/projects/noisy-breeze-647787/tables
+ * 
+ */
 import { SkyMass } from "@skymass/skymass";
 import "dotenv/config";
 
@@ -6,9 +19,8 @@ import pgPromise from "pg-promise";
 const db = await initDB();
 const sm = new SkyMass({ key: process.env["SKYMASS_KEY"] });
 
-
 //
-//
+// main page
 //
 sm.page("/surveys-mang-1", async (ui) => {
   const menu = ui.menubar({
